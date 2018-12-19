@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Add a User</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  </head>
+  <body>
+    <header class="main-header">
+      <nav class="main-header__nav">
+        <ul class="nav__list-items">
+          <li class="nav__list-item"><a href="/">Home</a></li>
+          <li class="nav__list-item"><a class="active" href="/users">Add Users</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="main-body">
+      <form class="main__form" action="/users-add" method="POST">
+        <div class="form__container">
+          <label for="username">User Name:</label> <input id="username" type="text" name="username" />
+        </div>
+        <button id="submit_btn" type="submit">Add User</button>
+      </form>
+    </main>
+    <script src="/js/users.js"></script>
+  </body>
+</html>
