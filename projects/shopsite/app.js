@@ -11,7 +11,12 @@ const bodyParser = require("body-parser");
 const app = express();
 
 //defines the default template engine
-app.set("view engine", "pug");
+//app.set("view engine", "pug");
+
+//express-handlebars infrastructure
+const expressHbs = require("express-handlebars");
+app.engine("hbs", expressHbs({ layoutsDir: "views/layouts", defaultLayout: "main-layout", extname: "hbs" }));
+app.set("view engine", "hbs");
 
 //Defines the body parser. Must be declared before the router declaration
 app.use(bodyParser.urlencoded({ extended: false }));

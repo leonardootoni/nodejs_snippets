@@ -11,7 +11,23 @@ const router = express.Router();
 router.get("/", (req, res, next) => {
   //get the list of producst from admin
   const products = adminData.products;
-  res.render("shop", { prods: products, pageTitle: "Shop", path: "/" });
+
+  /* PUG render() definition
+  res.render("shop", {
+    cache: true,
+    prods: products,
+    pageTitle: "Shop",
+    path: "/"
+  });
+   */
+
+  /* Handlebars render() definition */
+  res.render("shop", {
+    prods: products,
+    pageTitle: "Shop",
+    activeShop: true,
+    productCSS: true
+  });
 });
 
 module.exports = router;
