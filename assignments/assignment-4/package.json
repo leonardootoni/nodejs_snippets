@@ -1,0 +1,19 @@
+{
+  "name": "assignment-4",
+  "version": "1.0.0",
+  "description": "to create a small app to save names and then, show all names in a different url using template engine.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon -e 'ejs,js,json' app.js"
+  },
+  "author": "Leonardo Otoni de Assis",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  },
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  }
+}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("includes/head.ejs")%>
+  </head>
+  <body>
+    <header><%-include("includes/header.ejs")%></header>
+    <main><h1>List of users</h1></main>
+    <% if(users) { %>
+    <ul>
+      <% users.forEach(user => { %>
+      <li><%= user.name %></li>
+      <% }); %>
+    </ul>
+    <% } %> <%-include("includes/footer.ejs")%>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%-include("includes/head")%>
+  </head>
+  <body>
+    <header><%-include("includes/header.ejs")%></header>
+    <main>
+      <form id="username-form" action="/add-user" method="POST">
+        <label for="userField">User Name:</label>
+        <input id="userNameField" type="text" name="username" />
+        <input id="submit-btn" type="submit" value="Add User Name" />
+      </form>
+    </main>
+    <footer><%-include("includes/footer.ejs")%></footer>
+  </body>
+</html>
