@@ -4,10 +4,12 @@
 const path = require("path");
 const express = require("express");
 
+const errorsController = require("./controllers/errors");
+
 //-----------------------------------------------------------------------------
 // App route files import
 //-----------------------------------------------------------------------------
-const adminData = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 //-----------------------------------------------------------------------------
@@ -33,14 +35,12 @@ app.use(express.static(path.join(__dirname, "public")));
 // Register all App Routes defined in the Route files
 //-----------------------------------------------------------------------------
 app.use(shopRoutes);
-app.use("/admin", adminData.routes);
+app.use("/admin", adminRoutes);
 
 //-----------------------------------------------------------------------------
-// Generic middleware used for not found routes
+// Generic middleware used for not found routes - 404 Not Found
 //-----------------------------------------------------------------------------
-app.use((req, res, next) => {
-  res.status(404).render("404", { pageTitle: "Not Found" });
-});
+app.use(errorsController.getHTTP_404);
 
 //-----------------------------------------------------------------------------
 // Starts the http server through expressjs
