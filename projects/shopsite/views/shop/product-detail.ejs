@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%-include("../includes/head.ejs") %>
+  </head>
+  <body>
+    <header><%-include("../includes/navigation.ejs")%></header>
+    <main class="centered">
+      <h1><%=product.title%></h1>
+      <hr />
+      <div><img src="<%=product.imageUrl%>" width="250" height="350" alt="A Book" /></div>
+      <h2><%=product.price%></h2>
+      <p><%=product.description%></p>
+      <%-include("../includes/add-to-cart")%>
+    </main>
+    <%-include("../includes/footer.ejs")%>
+  </body>
+</html>
