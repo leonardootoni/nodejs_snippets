@@ -50,6 +50,23 @@ module.exports = class Product {
     });
   }
 
+  static delete(productId) {
+    if (!productId) {
+      throw new Error(
+        "Impossible to delete a product. An id must be provided."
+      );
+    }
+
+    getProductsFromFile(products => {
+      const filteredItems = products.filter(prod => prod.id !== productId);
+      fs.writeFile(p, JSON.stringify(filteredItems), err => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    });
+  }
+
   static fetchAll(callBack) {
     getProductsFromFile(callBack);
   }
