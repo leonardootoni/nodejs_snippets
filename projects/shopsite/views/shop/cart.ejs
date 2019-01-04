@@ -5,7 +5,81 @@
   </head>
   <body>
     <header><%-include("../includes/navigation.ejs")%></header>
-    <main><h1>My cart page</h1></main>
+    <main>
+      <% if(typeof cartProducts !== 'undefined' && cartProducts.products !==
+      'undefined' && cartProducts.products.length > 0) { %>
+      <table>
+        <h2>My Cart</h2>
+        <hr />
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Product Id</th>
+            <th>Quantity</th>
+            <th>Unit $</th>
+            <th>Sub-total $</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <%let runningTotal = 0; cartProducts.products.forEach( (product,
+          index) => { %>
+          <tr id="row-<%=index + 1%>">
+            <td><%=index + 1%></td>
+            <td>
+              <input type="text" value="<%=product.id%>" name="id" readonly />
+            </td>
+            <td>
+              <input
+                id="qty-row-<%=index + 1%>"
+                type="number"
+                value="<%=product.qty%>"
+                name="qty"
+                min="1"
+                step="1"
+                onchange="computeQtyChange('<%=product.id%>', '<%=index+1%>');"
+              />
+            </td>
+            <td>
+              <input
+                id="unit-price-row-<%=index + 1%>"
+                type="text"
+                value="<%=product.price%>"
+                readonly
+              />
+            </td>
+            <td>
+              <input
+                id="sub-total-row-<%=index + 1%>"
+                type="text"
+                value="<%=product.price*product.qty%>"
+                readonly
+              />
+              <%runningTotal+= (product.price*product.qty) %>
+            </td>
+            <td>
+              <button
+                onclick="removeProductFromCart('<%=product.id%>', 'row-<%=index + 1%>');"
+              >
+                Remove
+              </button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">Total:</td>
+            <td id="runningTotal">$<%=runningTotal.toFixed(2)%></td>
+          </tr>
+        </tfoot>
+      </table>
+      <hr />
+      <% } else { %>
+      <div><h1>Cart is empty</h1></div>
+      <% } %>
+    </main>
+    <script src="/js/cartValidation.js"></script>
     <%-include("../includes/footer.ejs")%>
   </body>
 </html>

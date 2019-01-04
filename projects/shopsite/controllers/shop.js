@@ -39,9 +39,12 @@ exports.getIndex = (req, res, next) => {
 
 //cart page controller
 exports.getCart = (req, res, next) => {
-  res.render("shop/cart", {
-    pageTitle: "Your Cart",
-    path: "/cart"
+  Cart.getCartProducts(cartProducts => {
+    res.render("shop/cart", {
+      pageTitle: "Your Cart",
+      path: "/cart",
+      cartProducts: cartProducts
+    });
   });
 };
 
@@ -49,11 +52,38 @@ exports.getCart = (req, res, next) => {
 exports.postCart = (req, res, next) => {
   const productId = req.body.productId;
   Product.findProductById(productId, product => {
-    Cart.addProduct(productId, product.price);
+    try {
+      Cart.addProduct(productId, product.price);
+    } catch (error) {
+      res.status(500).send({
+        status: "Error trying to add a product in the cart. Message: " + error
+      });
+    }
   });
 
-  console.log(productId);
   res.redirect("/cart");
+};
+
+// Delete a product from the cart. Receives a AJAX request
+exports.postDeleteProductFromCart = (req, res, next) => {
+  const productId = req.body.productId;
+  try {
+    Cart.delete(productId);
+  } catch (error) {
+    res.status(500).send({
+      status: "Error trying to delete a product in the cart. Message: " + error
+    });
+  }
+
+  res.send({ status: "received" });
+};
+
+// Update product's amount in the cart. Receives a AJAX request
+exports.putUpdateCartAmount = (req, res, next) => {
+  const productId = Number(req.body.productId);
+  const qty = Number(req.body.qty);
+  Cart.update(productId, qty);
+  res.send({ status: "updated" });
 };
 
 //orders page controller

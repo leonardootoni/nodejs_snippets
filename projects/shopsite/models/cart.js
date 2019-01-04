@@ -21,17 +21,20 @@ const getCartFromFile = callBack => {
 
 module.exports = class Cart {
   static addProduct(productId, productPrice) {
-    console.log(productId, productPrice);
     //fetch previous cart
     getCartFromFile(cart => {
       //Analyse the cart => find existing product
       const existingProductIndex = cart.products.findIndex(
-        prod => prod.id === productId
+        prod => prod.id === Number(productId)
       );
       const existingProduct = cart.products[existingProductIndex];
       let product;
       if (!existingProduct) {
-        product = { id: productId, qty: 1 };
+        product = {
+          id: Number(productId),
+          qty: 1,
+          price: Number(productPrice)
+        };
         cart.products = [...cart.products, product];
       } else {
         //Add new product and increase quantity
@@ -41,13 +44,61 @@ module.exports = class Cart {
         cart.products[existingProductIndex] = product;
       }
 
-      cart.totalPrice = cart.totalPrice + +productPrice;
       //Save the cart in the FS
       fs.writeFile(p, JSON.stringify(cart), err => {
         if (err) {
-          console.log(err);
+          throw err;
         }
       });
+    });
+  }
+
+  static update(productId, qty) {
+    getCartFromFile(cart => {
+      const productIndex = cart.products.findIndex(
+        prod => prod.id === productId
+      );
+
+      if (productIndex > -1) {
+        cart.products[productIndex].qty = qty;
+        let a = JSON.stringify(cart);
+
+        fs.writeFile(p, JSON.stringify(cart), err => {
+          if (err) {
+            throw err;
+          }
+        });
+      } else {
+        throw new Error("Product to update not found");
+      }
+    });
+  }
+
+  static delete(productId) {
+    if (!productId) {
+      throw new Error(
+        "Impossible to delete a product. An id must be provided."
+      );
+    } else {
+      getCartFromFile(cart => {
+        //Recover all products from cart except that one with the provided productId
+        const filteredItems = cart.products.filter(
+          product => product.id != productId
+        );
+
+        cart.products = [...filteredItems];
+        fs.writeFile(p, JSON.stringify(cart), err => {
+          if (err) {
+            throw err;
+          }
+        });
+      });
+    }
+  }
+
+  static getCartProducts(callBack) {
+    getCartFromFile(cart => {
+      callBack(cart);
     });
   }
 };

@@ -5,6 +5,7 @@ const path = require("path");
 const express = require("express");
 
 const errorsController = require("./controllers/errors");
+const db = require("./util/database");
 
 //-----------------------------------------------------------------------------
 // App route files import
@@ -28,6 +29,7 @@ app.set("views", "views");
 // Set the body parser. Must be declared before the router declaration
 //-----------------------------------------------------------------------------
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 //Defines the path to the public folder containing all static files (css, js, imgs, etc.)
 app.use(express.static(path.join(__dirname, "public")));
 
