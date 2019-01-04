@@ -5,7 +5,6 @@ const Product = require("../models/product");
 
 //add product controller
 exports.getAddProduct = (req, res, next) => {
-  //res.sendFile(path.join(rootDir, "views", "add-product.html"));
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
@@ -21,8 +20,10 @@ exports.postAddProduct = (req, res, next) => {
   const description = req.body.description;
 
   const product = new Product(null, title, imageUrl, description, price);
-  product.save();
-  res.redirect("/");
+  product
+    .save()
+    .then(() => res.redirect("/"))
+    .catch(error => console.error(error));
 };
 
 // Edit product (GET)
@@ -33,14 +34,18 @@ exports.getEditProduct = (req, res, next) => {
   }
 
   const productId = req.params.productId;
-  Product.findProductById(productId, product => {
-    res.render("admin/edit-product", {
-      pageTitle: "Edit Product",
-      product: product,
-      editing: editing,
-      submitAction: "/admin/edit-product"
+  Product.findProductById(productId)
+    .then(([product]) => {
+      res.render("admin/edit-product", {
+        pageTitle: "Edit Product",
+        product: product[0],
+        editing: editing,
+        submitAction: "/admin/edit-product"
+      });
+    })
+    .catch(error => {
+      console.error(error);
     });
-  });
 };
 
 // Edit product (POST)
@@ -66,11 +71,15 @@ exports.postDeleteProduct = (req, res, next) => {
 
 // admin/products controller
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render("admin/products", {
-      prods: products,
-      pageTitle: "Products Administration",
-      path: "/admin/products"
+  Product.fetchAll()
+    .then(([rows, fieldData]) => {
+      res.render("admin/products", {
+        prods: rows,
+        pageTitle: "Products Administration",
+        path: "/admin/products"
+      });
+    })
+    .catch(error => {
+      console.error(error);
     });
-  });
 };
