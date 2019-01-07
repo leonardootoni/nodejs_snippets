@@ -5,7 +5,7 @@ const path = require("path");
 const express = require("express");
 
 const errorsController = require("./controllers/errors");
-const db = require("./util/database");
+const sequelize = require("./util/database");
 
 //-----------------------------------------------------------------------------
 // App route files import
@@ -45,6 +45,9 @@ app.use("/admin", adminRoutes);
 app.use(errorsController.getHTTP_404);
 
 //-----------------------------------------------------------------------------
-// Starts the http server through expressjs
+// Sync database models and then starts the http server through expressjs
 //-----------------------------------------------------------------------------
-app.listen(3000);
+sequelize
+  .sync()
+  .then(result => app.listen(3000))
+  .catch(error => console.error(error));

@@ -6,25 +6,22 @@ const Cart = require("../models/cart");
 
 // shop products controller
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then(products => {
       res.render("shop/product-list", {
-        prods: rows,
+        prods: products,
         pageTitle: "All Products",
         path: "/products"
       });
     })
-    .catch(error => {
-      console.error(error);
-    });
+    .catch(error => console.error(error));
 };
 
 // shop product detail controller
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;
-  Product.findProductById(productId)
-    .then(([rows]) => {
-      const product = rows[0];
+  Product.findByPk(productId)
+    .then(product => {
       res.render("shop/product-detail", {
         pageTitle: product.title,
         product: product
@@ -35,17 +32,15 @@ exports.getProduct = (req, res, next) => {
 
 //index page controller
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then(products => {
       res.render("shop/index", {
-        prods: rows,
+        prods: products,
         pageTitle: "Shop",
         path: "/"
       });
     })
-    .catch(error => {
-      console.error(error);
-    });
+    .catch(error => console.error(error));
 };
 
 //cart page controller
