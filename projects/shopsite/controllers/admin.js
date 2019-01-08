@@ -20,7 +20,9 @@ exports.postAddProduct = (req, res, next) => {
     imageUrl: req.body.imageUrl,
     description: req.body.description
   })
-    .then(/* must redirect the response here, later*/)
+    .then(result => {
+      res.redirect("/");
+    })
     .catch(error => console.log(error));
 };
 
