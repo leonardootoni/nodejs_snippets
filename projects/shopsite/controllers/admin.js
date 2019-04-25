@@ -14,12 +14,27 @@ exports.getAddProduct = (req, res, next) => {
 
 // post product controller
 exports.postAddProduct = (req, res, next) => {
-  Product.create({
-    title: req.body.title,
-    price: Number(req.body.price),
-    imageUrl: req.body.imageUrl,
-    description: req.body.description
-  })
+  // Product.create({
+  //   title: req.body.title,
+  //   price: Number(req.body.price),
+  //   imageUrl: req.body.imageUrl,
+  //   description: req.body.description,
+  //   userId: req.user.id
+  // })
+  /*
+    Another way to create a product through Sequelize Associations
+    Once there is an association of product with user, Sequelize allows to invoke a method createEntityName()
+    and then, pass all atributes from that Entity.
+    In this case, an user has many products, which means, user.createProduct(...)
+    user set in the request from app.js
+  */
+  req.user
+    .createProduct({
+      title: req.body.title,
+      price: Number(req.body.price),
+      imageUrl: req.body.imageUrl,
+      description: req.body.description
+    })
     .then(result => {
       res.redirect("/");
     })
@@ -34,8 +49,11 @@ exports.getEditProduct = (req, res, next) => {
   }
 
   const productId = req.params.productId;
-  Product.findByPk(productId)
-    .then(product => {
+  req.user
+    .getProducts({ where: { id: productId } })
+    //Product.findByPk(productId)
+    .then(products => {
+      const product = products[0]; //getProducts always will return an array.
       res.render("admin/edit-product", {
         pageTitle: "Edit Product",
         product: product,
@@ -79,7 +97,9 @@ exports.postDeleteProduct = (req, res, next) => {
 
 // admin/products controller
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  req.user
+    .getProducts()
+    //Product.findAll()
     .then(products => {
       res.render("admin/products", {
         prods: products,

@@ -6,6 +6,8 @@ const express = require("express");
 
 const errorsController = require("./controllers/errors");
 const sequelize = require("./util/database");
+const Product = require("./models/product");
+const User = require("./models/user");
 
 //-----------------------------------------------------------------------------
 // App route files import
@@ -33,6 +35,16 @@ app.use(bodyParser.json());
 //Defines the path to the public folder containing all static files (css, js, imgs, etc.)
 app.use(express.static(path.join(__dirname, "public")));
 
+//--temporary: Set a user for all incoming requests
+app.use((req, res, next) => {
+  User.findByPk(1)
+    .then(user => {
+      req.user = user; //sets a sequelize object, not only a json data
+      next();
+    })
+    .catch(error => console.error(error));
+});
+
 //-----------------------------------------------------------------------------
 // Register all App Routes defined in the Route files
 //-----------------------------------------------------------------------------
@@ -47,7 +59,26 @@ app.use(errorsController.getHTTP_404);
 //-----------------------------------------------------------------------------
 // Sync database models and then starts the http server through expressjs
 //-----------------------------------------------------------------------------
+
+//Entity associations
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+
 sequelize
+  //.sync({ force: true })
   .sync()
-  .then(result => app.listen(3000))
+  .then(result => {
+    return User.findByPk(1);
+  })
+  .then(user => {
+    if (!user) {
+      return User.create({ name: "Leo", email: "leonardootoni@gmail.com" });
+    } else {
+      return user;
+    }
+  })
+  .then(result => {
+    //console.log(result);
+    app.listen(3000);
+  })
   .catch(error => console.error(error));
