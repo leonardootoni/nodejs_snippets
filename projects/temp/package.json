@@ -1,0 +1,23 @@
+{
+  "name": "boilerplate_eslint",
+  "version": "1.0.0",
+  "description": "A boilertplate for node or react apps with eslint and airbnb styleguide.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server/server.js"
+  },
+  "author": "Leonardo Otoni de Assis",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "body-parser": "^1.19.0"
+  }
+}
