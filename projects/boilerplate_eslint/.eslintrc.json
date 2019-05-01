@@ -6,7 +6,7 @@
   "extends": ["eslint:recommended", "airbnb", "plugin:import/errors"],
   "globals": {
     "Atomics": "readonly",
-    "SharedArrayBuffer": "readonl"
+    "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
     "ecmaFeatures": {
